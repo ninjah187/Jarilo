@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jarilo.Examples.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,7 +13,10 @@ namespace Jarilo.Examples.TeamAdd
         [Option("--attack", "Set added ninja's attack.")]
         public int Attack { get; set; } = 10;
 
-        [Option("--weapons", "Set added ninja's weapons.")]
-        public string[] Weapons { get; set; }
+        [Option("--weapon", "Set added ninja's weapon type.")]
+        public Weapon Weapon { get; set; } = Weapon.None;
+
+        [Option("--items", "Set added ninja's additional equipment.")]
+        public Item[] Items { get; set; } = new Item[0];
     }
 }

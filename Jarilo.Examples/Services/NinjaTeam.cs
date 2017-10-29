@@ -15,13 +15,13 @@ namespace Jarilo.Examples.Services
         {
             _ninjas = new List<Ninja>
             {
-                new Ninja("Sensei", 250, 25)
+                new Ninja("Sensei", 250, 25, Weapon.Katana)
             };
         }
 
-        public void Add(string name, int health = 100, int attack = 10)
+        public void Add(string name, int health = 100, int attack = 10, Weapon weapon = Weapon.None)
         {
-            _ninjas.Add(new Ninja(name, health, attack));
+            _ninjas.Add(new Ninja(name, health, attack, weapon));
         }
 
         public void Remove(string name, bool caseSensitive = true)

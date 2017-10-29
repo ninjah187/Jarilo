@@ -12,6 +12,10 @@ namespace Jarilo.Parsing
         public CommandMetadata Parse(AppMetadata appMetadata, Token[] tokens)
         {
             var commandName = ParseCommandName(tokens);
+            if (commandName == null)
+            {
+                return null;
+            }
             var metadata = appMetadata
                 .Commands
                 .First(command => command.Name == commandName);
@@ -21,7 +25,7 @@ namespace Jarilo.Parsing
         string ParseCommandName(Token[] tokens)
             => tokens
                 .OfType<CommandToken>()
-                .First()
-                .Value;
+                .FirstOrDefault()
+                ?.Value;
     }
 }

@@ -18,13 +18,12 @@ namespace Jarilo.Tokenizing
                 .Select(command => command.Name)
                 .OrderByDescending(commandName => commandName.Length)
                 .FirstOrDefault(commandName => joinedArgs.StartsWith(commandName));
-            if (inputCommandName == null)
+            if (inputCommandName != null)
             {
-                throw new InvalidOperationException("Unknown command.");
+                yield return new CommandToken(inputCommandName);
             }
-            yield return new CommandToken(inputCommandName);
             args = joinedArgs
-                .Remove(0, inputCommandName.Length)
+                .Remove(0, inputCommandName?.Length ?? 0)
                 .TrimStart(' ')
                 .Split(' ', StringSplitOptions.RemoveEmptyEntries);
             foreach (var arg in args)

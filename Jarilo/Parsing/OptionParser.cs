@@ -13,6 +13,10 @@ namespace Jarilo.Parsing
 
         public object Parse(Type optionsType, Token[] tokens)
         {
+            if (optionsType == null)
+            {
+                return null;
+            }
             var options = Activator.CreateInstance(optionsType);
             var propertyAggregates = ParseProperties(optionsType).ToArray();
             foreach (var split in SplitByOptionTokens(tokens))

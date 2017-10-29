@@ -1,8 +1,8 @@
-﻿using Jarilo.DependencyInjection;
-using Jarilo.Help;
+﻿using Jarilo.Help;
 using Jarilo.Metadata;
 using Jarilo.Parsing;
 using Jarilo.Tokenizing;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,19 +13,24 @@ namespace Jarilo
 {
     public class App
     {
-        public ServiceCollection Services { get; }
+        public IServiceCollection Services { get; }
 
-        readonly AppMetadata _metadata;
+        ServiceProvider _serviceProvider;
+        AppMetadata _metadata;
+
+        readonly AppMetadataBuilder _metadataBuilder;
         readonly Tokenizer _tokenizer;
         readonly CommandParser _commandParser;
         readonly ArgumentParser _argumentParser;
         readonly OptionParser _optionParser;
         readonly HelpDocs _helpDocs;
 
+        bool _disposeAfterRun = true;
+
         public App()
         {
             Services = new ServiceCollection();
-            _metadata = new AppMetadata();
+            _metadataBuilder = new AppMetadataBuilder();
             _tokenizer = new Tokenizer();
             _commandParser = new CommandParser();
             _argumentParser = new ArgumentParser();
@@ -35,10 +40,28 @@ namespace Jarilo
 
         public void Run(string[] args)
         {
-            _metadata.Build(Services);
+            _serviceProvider = _serviceProvider ?? (_serviceProvider = Services.BuildServiceProvider());
+            if (_metadata == null)
+            {
+                var appTypes = Assembly.GetEntryAssembly().GetTypes();
+                _metadata = _metadataBuilder.Build(appTypes, _serviceProvider);
+            }
             var tokens = _tokenizer.Tokenize(_metadata, args).ToArray();
             var commandMetadata = _commandParser.Parse(_metadata, tokens);
-            if (tokens.Any(token => token is HelpOptionToken))
+            var helpTokenExists = tokens.Any(token => token is HelpOptionToken);
+            if (commandMetadata == null)
+            {
+                if (helpTokenExists)
+                {
+                    _helpDocs.Print(_metadata);
+                }
+                else
+                {
+                    Console.WriteLine("Unknown command.");
+                }
+                return;
+            }
+            if (helpTokenExists)
             {
                 _helpDocs.Print(commandMetadata);
                 return;
@@ -46,16 +69,22 @@ namespace Jarilo
             var arguments = _argumentParser.Parse(commandMetadata.ArgumentsType, tokens);
             var options = _optionParser.Parse(commandMetadata.OptionsType, tokens);
             ExecuteCommand(commandMetadata, arguments, options);
+            if (_disposeAfterRun == true)
+            {
+                Dispose();
+            }
         }
 
         public void ReadEvalPrintLoop()
         {
+            _disposeAfterRun = false;
             while (true)
             {
                 Console.Write("> ");
                 var input = Console.ReadLine();
                 if (input == ":q")
                 {
+                    Dispose();
                     return;
                 }
                 Run(input.Split(" "));
@@ -88,11 +117,11 @@ namespace Jarilo
             {
                 return new object[0];
             }
-            if (parameters.Length == 1 && IsArgumentsType(parameters.First().ParameterType))
+            if (parameters.Length == 1 && parameters.First().ParameterType.IsArgumentsType())
             {
                 return new object[] { arguments };
             }
-            if (parameters.Length == 1 && IsOptionsType(parameters.First().ParameterType))
+            if (parameters.Length == 1 && parameters.First().ParameterType.IsOptionsType())
             {
                 return new object[] { options };
             }
@@ -127,14 +156,9 @@ namespace Jarilo
             throw new NotImplementedException();
         }
 
-        bool IsArgumentsType(Type type)
-            => type
-                .GetProperties()
-                .Any(property => property.GetCustomAttribute<ArgumentAttribute>() != null);
-
-        bool IsOptionsType(Type type)
-            => type
-                .GetProperties()
-                .Any(property => property.GetCustomAttribute<OptionAttribute>() != null);
+        void Dispose()
+        {
+            _serviceProvider?.Dispose();
+        }
     }
 }

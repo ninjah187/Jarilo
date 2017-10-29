@@ -25,9 +25,6 @@ namespace Jarilo.Parsing
             {
                 var propertyType = aggregate.property.PropertyType;
                 var set = aggregate.property.GetSetMethod();
-                //var setParameter = propertyType.IsArray
-                //    ? ConvertValues(propertyType, argumentValues)
-                //    : ConvertValue(propertyType, ref argumentValues);
                 var setParameter = _propertyValueParser.ParseValues(propertyType, argumentValues)
                     ?? _propertyValueParser.ParseValue(propertyType, ref argumentValues);
                 set.Invoke(arguments, new object[] { setParameter });

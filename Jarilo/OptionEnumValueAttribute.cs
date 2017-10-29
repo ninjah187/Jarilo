@@ -4,13 +4,13 @@ using System.Text;
 
 namespace Jarilo
 {
-    [AttributeUsage(AttributeTargets.Property)]
-    public class OptionAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Field)]
+    public class OptionEnumValueAttribute : Attribute
     {
         public string Name { get; }
         public string Description { get; }
 
-        public OptionAttribute(string name, string description)
+        public OptionEnumValueAttribute(string name, string description)
         {
             Name = name;
             Description = description;

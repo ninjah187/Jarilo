@@ -9,7 +9,13 @@ namespace Jarilo.Help
     {
         public void Print(AppMetadata metadata)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Usage:");
+            Console.WriteLine("  <command> [arguments] [options]");
+            Console.WriteLine("Commands:");
+            foreach (var command in metadata.Commands)
+            {
+                Console.WriteLine($"  {command.Name}");
+            }
         }
 
         public void Print(CommandMetadata metadata)
@@ -72,10 +78,20 @@ namespace Jarilo.Help
             if (optionType != typeof(bool))
             {
                 option += optionType.IsArray
-                    ? " <args...>"
-                    : " <arg>";
+                    ? " <values...>"
+                    : " <value>";
             }
             option += $" - {metadata.Description}";
+            var enumMetadata = metadata as OptionEnumMetadata;
+            if (enumMetadata == null)
+            {
+                return option;
+            }
+            option += $"\n    Possible values:";
+            foreach (var value in enumMetadata.PossibleValues)
+            {
+                option += $"\n      {value.Name} - {value.Description}";
+            }
             return option;
         }
     }

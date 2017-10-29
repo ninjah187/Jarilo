@@ -13,7 +13,7 @@ namespace Jarilo.Metadata
 
         public ArgumentMetadata(string name, string description, PropertyInfo property)
         {
-            Name = name;
+            Name = Char.ToLowerInvariant(name[0]) + name.Substring(1);
             Description = description;
             Property = property;
         }

@@ -17,7 +17,7 @@ namespace Jarilo.Examples.TeamAdd
 
         public void Run(Arguments arguments, Options options)
         {
-            _ninjaTeam.Add(arguments.Name, options.Health, options.Attack);
+            _ninjaTeam.Add(arguments.Name, options.Health, options.Attack, options.Weapon);
             Console.WriteLine($"ninja {arguments.Name} added");
         }
     }

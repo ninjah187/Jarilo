@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Jarilo
+namespace Jarilo.Metadata
 {
-    [AttributeUsage(AttributeTargets.Property)]
-    public class OptionAttribute : Attribute
+    class ValueMetadata
     {
         public string Name { get; }
         public string Description { get; }
 
-        public OptionAttribute(string name, string description)
+        public ValueMetadata(string name, string description)
         {
             Name = name;
             Description = description;

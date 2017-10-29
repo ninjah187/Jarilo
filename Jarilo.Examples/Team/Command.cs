@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Jarilo.Examples.Team
 {
-    [Command("ninja team", "Adds ninja to your team.")]
+    [Command("ninja team", "Lists your current team of ninjas.")]
     [View(typeof(View))]
     class Command
     {
