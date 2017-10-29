@@ -59,7 +59,7 @@ namespace Jarilo.Parsing
                 .Select(field => new
                 {
                     EnumValue = field.GetValue(null),
-                    OptionEnumValueName = field.GetCustomAttribute<OptionEnumValueAttribute>()?.Name
+                    OptionEnumValueName = field.GetCustomAttribute<ValueAttribute>()?.Name
                 })
                 .Where(aggregate => aggregate.OptionEnumValueName == value)
                 .FirstOrDefault();

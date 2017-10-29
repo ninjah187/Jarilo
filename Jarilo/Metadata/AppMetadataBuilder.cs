@@ -95,11 +95,32 @@ namespace Jarilo.Metadata
                     Property = property,
                     ArgumentAttribute = property.GetCustomAttribute<ArgumentAttribute>()
                 })
-                .Where(argumentAggregate => argumentAggregate.ArgumentAttribute != null)
-                .Select(argumentAggregate => new ArgumentMetadata(
-                    argumentAggregate.Property.Name,
-                    argumentAggregate.ArgumentAttribute.Description,
-                    argumentAggregate.Property))
+                .Where(aggregate => aggregate.ArgumentAttribute != null)
+                .Select(aggregate => new
+                {
+                    Property = aggregate.Property,
+                    ArgumentAttribute = aggregate.ArgumentAttribute,
+                    PossibleValues = BuildValuesMetadata(aggregate.Property)
+                })
+                .Select(aggregate =>
+                {
+                    if (aggregate.PossibleValues == null)
+                    {
+                        return new ArgumentMetadata(
+                            aggregate.Property.Name,
+                            aggregate.ArgumentAttribute.Description,
+                            aggregate.Property);
+                    }
+                    else
+                    {
+
+                        return new ArgumentEnumMetadata(
+                            aggregate.Property.Name,
+                            aggregate.ArgumentAttribute.Description,
+                            aggregate.Property,
+                            aggregate.PossibleValues);
+                    }
+                })
                 .ToArray()
                 ?? Array.Empty<ArgumentMetadata>();
             return metadata;
@@ -115,14 +136,11 @@ namespace Jarilo.Metadata
                     OptionAttribute = property.GetCustomAttribute<OptionAttribute>()
                 })
                 .Where(aggregate => aggregate.OptionAttribute != null)
-                .Select(aggregate =>
+                .Select(aggregate => new
                 {
-                    return new
-                    {
-                        Property = aggregate.Property,
-                        OptionAttribute = aggregate.OptionAttribute,
-                        PossibleValues = GetOptionPossibleValues(aggregate.Property)
-                    };
+                    Property = aggregate.Property,
+                    OptionAttribute = aggregate.OptionAttribute,
+                    PossibleValues = BuildValuesMetadata(aggregate.Property)
                 })
                 .Select(aggregate =>
                 {
@@ -135,15 +153,11 @@ namespace Jarilo.Metadata
                     }
                     else
                     {
-                        var valueMetadata = aggregate
-                            .PossibleValues
-                            .Select(value => new ValueMetadata(value.name, value.description))
-                            .ToArray();
                         return new OptionEnumMetadata(
                             aggregate.OptionAttribute.Name,
                             aggregate.OptionAttribute.Description,
                             aggregate.Property,
-                            valueMetadata);
+                            aggregate.PossibleValues);
                     }
                 })
                 .ToArray()
@@ -151,7 +165,7 @@ namespace Jarilo.Metadata
             return metadata;
         }
 
-        (string name, string description)[] GetOptionPossibleValues(PropertyInfo property)
+        ValueMetadata[] BuildValuesMetadata(PropertyInfo property)
         {
             var propertyCoreType = property.PropertyType.IsArray
                 ? property.PropertyType.GetElementType()
@@ -162,9 +176,11 @@ namespace Jarilo.Metadata
             }
             return propertyCoreType
                 .GetFields(BindingFlags.Public | BindingFlags.Static)
-                .Select(field => field.GetCustomAttribute<OptionEnumValueAttribute>())
+                .Select(field => field.GetCustomAttribute<ValueAttribute>())
                 .Where(enumValueAttribute => enumValueAttribute != null)
-                .Select(enumValueAttribute => (enumValueAttribute.Name, enumValueAttribute.Description))
+                .Select(enumValueAttribute => new ValueMetadata(
+                    enumValueAttribute.Name,
+                    enumValueAttribute.Description))
                 .ToArray();
         }
     }

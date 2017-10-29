@@ -56,7 +56,7 @@ namespace Jarilo.Help
             return usage;
         }
 
-        string Argument(ArgumentMetadata metadata, bool withDescription = false)
+        string Argument(ArgumentMetadata metadata, bool verbose = false)
         {
             var argument = $"<{metadata.Name}";
             if (metadata.Property.PropertyType.IsArray)
@@ -64,11 +64,16 @@ namespace Jarilo.Help
                 argument += "...";
             }
             argument += ">";
-            if (withDescription)
+            if (verbose)
             {
                 argument += $" - {metadata.Description}";
             }
-            return argument;
+            var enumMetadata = metadata as ArgumentEnumMetadata;
+            if (enumMetadata == null || !verbose)
+            {
+                return argument;
+            }
+            return argument += PossibleValues(enumMetadata.PossibleValues);
         }
 
         string Option(OptionMetadata metadata)
@@ -87,12 +92,17 @@ namespace Jarilo.Help
             {
                 return option;
             }
-            option += $"\n    Possible values:";
-            foreach (var value in enumMetadata.PossibleValues)
+            return option += PossibleValues(enumMetadata.PossibleValues);
+        }
+
+        string PossibleValues(ValueMetadata[] metadata)
+        {
+            var values = $"\n    Possible values:";
+            foreach (var value in metadata)
             {
-                option += $"\n      {value.Name} - {value.Description}";
+                values += $"\n      {value.Name} - {value.Description}";
             }
-            return option;
+            return values;
         }
     }
 }
