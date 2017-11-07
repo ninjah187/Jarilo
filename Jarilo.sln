@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jarilo", "Jarilo\Jarilo.csproj", "{77494336-DC16-4360-9FC3-E9EF0FFC9462}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jarilo", "Jarilo\Jarilo.csproj", "{77494336-DC16-4360-9FC3-E9EF0FFC9462}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jarilo.Examples", "Jarilo.Examples\Jarilo.Examples.csproj", "{80EC250A-AD0F-49B4-94C5-8043E375E709}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jarilo.Examples", "Jarilo.Examples\Jarilo.Examples.csproj", "{80EC250A-AD0F-49B4-94C5-8043E375E709}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jarilo.Tests", "Jarilo.Tests\Jarilo.Tests.csproj", "{0111CD1C-1E5C-4408-9A0A-0A728B6EBECB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{80EC250A-AD0F-49B4-94C5-8043E375E709}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80EC250A-AD0F-49B4-94C5-8043E375E709}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80EC250A-AD0F-49B4-94C5-8043E375E709}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0111CD1C-1E5C-4408-9A0A-0A728B6EBECB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0111CD1C-1E5C-4408-9A0A-0A728B6EBECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0111CD1C-1E5C-4408-9A0A-0A728B6EBECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0111CD1C-1E5C-4408-9A0A-0A728B6EBECB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
