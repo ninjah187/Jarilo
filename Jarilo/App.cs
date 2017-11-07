@@ -18,6 +18,7 @@ namespace Jarilo
         ServiceProvider _serviceProvider;
         AppMetadata _metadata;
 
+        readonly Type[] _types;
         readonly AppMetadataBuilder _metadataBuilder;
         readonly Tokenizer _tokenizer;
         readonly CommandParser _commandParser;
@@ -28,7 +29,13 @@ namespace Jarilo
         bool _disposeAfterRun = true;
 
         public App()
+            : this(Assembly.GetEntryAssembly().GetTypes())
         {
+        }
+
+        public App(Type[] appTypes)
+        {
+            _types = appTypes;
             Services = new ServiceCollection();
             _metadataBuilder = new AppMetadataBuilder();
             _tokenizer = new Tokenizer();
@@ -41,11 +48,7 @@ namespace Jarilo
         public void Run(string[] args)
         {
             _serviceProvider = _serviceProvider ?? (_serviceProvider = Services.BuildServiceProvider());
-            if (_metadata == null)
-            {
-                var appTypes = Assembly.GetEntryAssembly().GetTypes();
-                _metadata = _metadataBuilder.Build(appTypes, _serviceProvider);
-            }
+            _metadata = _metadata ?? (_metadata = _metadataBuilder.Build(_types, _serviceProvider));
             var tokens = _tokenizer.Tokenize(_metadata, args).ToArray();
             var commandMetadata = _commandParser.Parse(_metadata, tokens);
             var helpTokenExists = tokens.Any(token => token is HelpOptionToken);

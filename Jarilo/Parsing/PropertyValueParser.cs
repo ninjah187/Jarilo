@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -26,7 +27,7 @@ namespace Jarilo.Parsing
             var elementType = propertyType.GetElementType();
             Func<string, object> parseElement = elementType.IsEnum
                 ? value => ParseEnum(elementType, value)
-                : (Func<string, object>) (value => Convert.ChangeType(value, elementType));
+                : (Func<string, object>) (value => Convert.ChangeType(value, elementType, CultureInfo.InvariantCulture));
             var convertedElements = values
                 .Select(value => parseElement(value))
                 .Where(value => value != null)
@@ -48,7 +49,7 @@ namespace Jarilo.Parsing
             {
                 return ParseEnum(propertyType, value);
             }
-            var convertedValue = Convert.ChangeType(value, propertyType);
+            var convertedValue = Convert.ChangeType(value, propertyType, CultureInfo.InvariantCulture);
             return convertedValue;
         }
 
@@ -65,7 +66,7 @@ namespace Jarilo.Parsing
                 .FirstOrDefault();
             if (optionEnumValueAggregate == null)
             {
-                return null;
+                throw new FormatException($"Parsing error in enum value {value} of type {enumType.FullName}.");
             }
             else
             {
