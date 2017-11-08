@@ -130,7 +130,7 @@ namespace Jarilo
             }
             if (parameters.Length > 2)
             {
-                throw new NotImplementedException($"Run method needs 0, 1 or 2 parameters.");
+                throw new InvalidOperationException($"Run method needs 0, 1 or 2 parameters.");
             }
             var first = parameters.First();
             var second = parameters.Skip(1).First();
@@ -138,7 +138,7 @@ namespace Jarilo
             {
                 return new object[] { arguments, options };
             }
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
 
         object[] GetRenderMethodParameters(MethodInfo renderMethod, object viewModel)
@@ -154,9 +154,9 @@ namespace Jarilo
             }
             if (parameters.Length > 1)
             {
-                throw new NotImplementedException($"Render method needs 0 or 1 parameter.");
+                throw new InvalidOperationException($"Render method needs 0 or 1 parameter.");
             }
-            throw new NotImplementedException();
+            throw new InvalidOperationException();
         }
 
         void Dispose()
