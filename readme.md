@@ -152,7 +152,7 @@ class Arguments
     public Title Title { get; set; }
 }
 ```
-```
+```cs
 [Command("hello", "Greets user.")]
 class Command
 {
