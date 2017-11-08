@@ -85,7 +85,7 @@ namespace Jarilo
             {
                 Console.Write("> ");
                 var input = Console.ReadLine();
-                if (input == ":q")
+                if (input == null)
                 {
                     Dispose();
                     return;
