@@ -366,9 +366,10 @@ Please check project `Jarilo.Examples` in source code for more sophisticated exa
 - `async` support.
 - Shorthand options.
 - Exporting documentation of application (e. g. in Markdown format).
-- Rich cofiguration options (e.g. translations, REPL prompt etc).
+- Rich configuration options (e.g. translations, REPL prompt etc).
 - Pluggable IoC container.
 - Some kind of view template engine - that could be really nice feature.
 - Docs and examples of testing Jarilo apps.
+- Reactive views.
 
 Got anything on your mind? I'd feel happy to see you contribute or file an issue.

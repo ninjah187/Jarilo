@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <PackageId>Jarilo</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Authors>Karol Hinz</Authors>
+    <Description>.NET Core 2.0 command line application framework.</Description>
+    <ProjectUrl>https://github.com/ninjah187/Jarilo</ProjectUrl>
+    <PackageTags>command line interface cli app terminal console</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
