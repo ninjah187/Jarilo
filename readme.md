@@ -3,7 +3,9 @@
 ## .NET Core 2.0 command line application framework.
 
 Have you built nice library and realized adding CLI tooling would be great but you get headache whenever thinking about all the wasted time on writing boilerplate code?
+
 Are you going to create complex command line app and looking for structured, testable architecture?
+
 Do you want to spin up CLI apps easily and quickly?
 
 You may found the answer.
@@ -29,8 +31,8 @@ Jarilo app can be run in just few lines of code:
 ```cs
 static void Main(string[] args)
 {
-	var app = new App();
-	app.Run(args);
+    var app = new App();
+    app.Run(args);
 }
 ```
 
@@ -44,10 +46,10 @@ Commands are entry points for user's requests. Command at its simplest form look
 [Command("hello", "Greets user.")]
 class Command
 {
-	public void Run()
-	{
-		Console.WriteLine("Hello, user!");
-	}
+    public void Run()
+    {
+        Console.WriteLine("Hello, user!");
+    }
 }
 ```
 
@@ -64,21 +66,21 @@ Commands can have arguments. Arguments are used by defining class with `[Argumen
 ```cs
 class Arguments
 {
-	[Argument("User's name.")]
-	public string Name { get; set; }
+    [Argument("User's name.")]
+    public string Name { get; set; }
 }
 ```
 ```cs
 [Command("hello", "Greets user.")]
 class Command
 {
-	public void Run(Arguments arguments)
-	{
-		var userName = string.IsNullOrEmpty(arguments.Name)
-			? "stranger"
-			: arguments.Name;
-		Console.WriteLine($"Hello, {userName}!");
-	}
+    public void Run(Arguments arguments)
+    {
+        var userName = string.IsNullOrEmpty(arguments.Name)
+            ? "stranger"
+            : arguments.Name;
+        Console.WriteLine($"Hello, {userName}!");
+    }
 }
 ```
 ```
@@ -95,8 +97,8 @@ Commands can also have options. Using options is similar to using arguments:
 ```cs
 class Options
 {
-	[Option("--caring", "Ask user for mood after invitation.")]
-	public bool IsCaring { get; set; }
+    [Option("--caring", "Ask user for mood after invitation.")]
+    public bool IsCaring { get; set; }
 }
 ```
 
@@ -104,17 +106,17 @@ class Options
 [Command("hello", "Greets user.")]
 class Command
 {
-	public void Run(Arguments arguments, Options options)
-	{
-		var userName = string.IsNullOrEmpty(arguments.Name)
-			? "stranger"
-			: arguments.Name;
-		Console.WriteLine($"Hello, {userName}!");
-		if (options.IsCaring)
-		{
-			Console.WriteLine("How are you today?");
-		}
-	}
+    public void Run(Arguments arguments, Options options)
+    {
+        var userName = string.IsNullOrEmpty(arguments.Name)
+            ? "stranger"
+            : arguments.Name;
+        Console.WriteLine($"Hello, {userName}!");
+        if (options.IsCaring)
+        {
+            Console.WriteLine("How are you today?");
+        }
+    }
 }
 ```
 
@@ -134,30 +136,30 @@ Enum types can be used both as arguments and options. In order to tell parser ho
 ```cs
 enum Title
 {
-	None,
+    None,
 
-	[Value("sir", "Title for gentlemans.")]
-	Sir,
+    [Value("sir", "Title for gentlemans.")]
+    Sir,
 
-	[Value("madame", "Title for ladies.")]
-	Madame
+    [Value("madame", "Title for ladies.")]
+    Madame
 }
 ```
 ```cs
 class Arguments
 {
-	[Argument("User's title.")]
-	public Title Title { get; set; }
+    [Argument("User's title.")]
+    public Title Title { get; set; }
 }
 ```
 ```
 [Command("hello", "Greets user.")]
 class Command
 {
-	public void Run(Arguments arguments)
-	{
-		Console.WriteLine($"Hello, {arguments.Title}!");
-	}
+    public void Run(Arguments arguments)
+    {
+        Console.WriteLine($"Hello, {arguments.Title}!");
+    }
 }
 ```
 ```
@@ -174,10 +176,10 @@ Presentation layer can be decoupled from commands by introducing views.  Take a 
 ```cs
 class View
 {
-	public void Render()
-	{
-		Console.WriteLine("Hello, stranger!");
-	}
+    public void Render()
+    {
+        Console.WriteLine("Hello, stranger!");
+    }
 }
 ```
 ```cs
@@ -185,9 +187,9 @@ class View
 [View(typeof(View))]
 class Command
 {
-	public void Run()
-	{
-	}
+    public void Run()
+    {
+    }
 }
 ```
 ```
@@ -202,16 +204,16 @@ Passing data from commands to views is handled by view models. View model is an 
 ```cs
 class ViewModel
 {
-	public string FormattedMessage { get; set; }
+    public string FormattedMessage { get; set; }
 }
 ```
 ```cs
 class View
 {
-	public void Render(ViewModel viewModel)
-	{
-		Console.WriteLine(viewModel.FormattedMessage);
-	}
+    public void Render(ViewModel viewModel)
+    {
+        Console.WriteLine(viewModel.FormattedMessage);
+    }
 }
 ```
 ```cs
@@ -219,14 +221,14 @@ class View
 [View(typeof(View))]
 class Command
 {
-	public ViewModel Run()
-	{
-		var message = "Hello, stranger!";
-		return new ViewModel
-		{
-			FormattedMessage = $"** {message} **";
-		};
-	}
+    public ViewModel Run()
+    {
+        var message = "Hello, stranger!";
+        return new ViewModel
+        {
+            FormattedMessage = $"** {message} **";
+        };
+    }
 }
 ```
 ```
@@ -241,36 +243,36 @@ Jarilo uses `Microsoft.Extensions.DependencyInjection` as inversion of control c
 ```cs
 class GreetingService : IGreetingService
 {
-	public string Greet(string userName)
-	{
-		return $"Hello, {userName}!";
-	}
+    public string Greet(string userName)
+    {
+        return $"Hello, {userName}!";
+    }
 }
 ```
 ```cs
 static void Main(string[] args)
 {
-	var app = new App();
-	app.Services.AddSingleton<IGreetingService, GreetingService>();
-	app.Run(args);
+    var app = new App();
+    app.Services.AddSingleton<IGreetingService, GreetingService>();
+    app.Run(args);
 }
 ```
 ```cs
 [Command("hello", "Greets user.")]
 class Command
 {
-	readonly IGreetingService _greetingService;
+    readonly IGreetingService _greetingService;
 
-	public Command(IGreetingService greetingService)
-	{
-		_greetingService = greetingService;
-	}
+    public Command(IGreetingService greetingService)
+    {
+        _greetingService = greetingService;
+    }
 
-	public void Run()
-	{
-		var greeting = _greetingService.Greet("stranger");
-		Console.WriteLine(greeting);
-	}
+    public void Run()
+    {
+        var greeting = _greetingService.Greet("stranger");
+        Console.WriteLine(greeting);
+    }
 }
 ```
 ```
@@ -285,8 +287,8 @@ Jarilo supports alternative run mode - REPL. It allows users for interactive ses
 ```cs
 static void Main()
 {
-	var app = new App();
-	app.ReadEvalPrintLoop();
+    var app = new App();
+    app.ReadEvalPrintLoop();
 }
 ```
 
@@ -297,13 +299,13 @@ Jarilo handles special help options `-?` `-h` `--help` which can be used with an
 ```cs
 enum Title
 {
-	None,
+    None,
 
-	[Value("sir", "Title for gentlemans.")]
-	Sir,
+    [Value("sir", "Title for gentlemans.")]
+    Sir,
 
-	[Value("madame", "Title for ladies.")]
-	Madame
+    [Value("madame", "Title for ladies.")]
+    Madame
 }
 ```
 ```cs
@@ -316,21 +318,21 @@ class Arguments
 ```cs
 class Options
 {
-	[Option("--caring", "Ask user for mood after invitation.")]
-	public bool IsCaring { get; set; }
+    [Option("--caring", "Ask user for mood after invitation.")]
+    public bool IsCaring { get; set; }
 
-	[Option("--title", "User's title.")]
-	public Title Title { get; set; }
+    [Option("--title", "User's title.")]
+    public Title Title { get; set; }
 }
 ```
 ```cs
 [Command("hello", "Greets user.")]
 class Command
 {
-	public void Run(Arguments arguments, Options options)
-	{
-		// handle command...
-	}
+    public void Run(Arguments arguments, Options options)
+    {
+        // handle command...
+    }
 }
 ```
 ```
