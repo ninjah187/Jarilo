@@ -59,7 +59,7 @@ namespace Jarilo.Help
         string Argument(ArgumentMetadata metadata, bool verbose = false)
         {
             var argument = $"<{metadata.Name}";
-            if (metadata.Property.PropertyType.IsArray)
+            if (metadata.IsArray)
             {
                 argument += "...";
             }

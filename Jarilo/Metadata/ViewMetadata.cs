@@ -7,27 +7,22 @@ namespace Jarilo.Metadata
 {
     class ViewMetadata
     {
-        public Type Type { get; }
-        public MethodInfo Render { get; }
-        public bool Exists => Type != null;
+        public bool Exists => Instance != null;
 
         public object Instance
         {
             get
             {
-                if (Type == null)
-                {
-                    return null;
-                }
-                return _instance ?? (_instance = Activator.CreateInstance(Type));
+                return _instance ?? (_instance = _factory());
             }
         }
         object _instance;
 
-        public ViewMetadata(Type viewType)
+        readonly Func<object> _factory;
+
+        public ViewMetadata(Func<object> factory)
         {
-            Type = viewType;
-            Render = viewType?.GetMethod("Render");
+            _factory = factory;
         }
     }
 }

@@ -9,7 +9,12 @@ namespace Jarilo.Parsing
 {
     class ArgumentParser
     {
-        readonly PropertyValueParser _propertyValueParser = new PropertyValueParser();
+        readonly PropertyValueParser _propertyValueParser;
+
+        public ArgumentParser(PropertyValueParser propertyValueParser)
+        {
+            _propertyValueParser = propertyValueParser;
+        }
 
         // TODO: pass metadata to parsers?
         public object Parse(Type argumentsType, Token[] tokens)

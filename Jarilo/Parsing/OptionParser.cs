@@ -9,7 +9,12 @@ namespace Jarilo.Parsing
 {
     class OptionParser
     {
-        readonly PropertyValueParser _propertyValueParser = new PropertyValueParser();
+        readonly PropertyValueParser _propertyValueParser;
+
+        public OptionParser(PropertyValueParser propertyValueParser)
+        {
+            _propertyValueParser = propertyValueParser;
+        }
 
         public object Parse(Type optionsType, Token[] tokens)
         {

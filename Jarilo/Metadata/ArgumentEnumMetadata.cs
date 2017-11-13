@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jarilo.Tokenizing;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -12,9 +13,9 @@ namespace Jarilo.Metadata
         public ArgumentEnumMetadata(
             string name,
             string description,
-            PropertyInfo property,
+            bool isArray,
             ValueMetadata[] possibleValues)
-            : base(name, description, property)
+            : base(name, description, isArray)
         {
             PossibleValues = possibleValues;
         }
