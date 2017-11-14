@@ -2,6 +2,7 @@
 using Jarilo.Metadata;
 using Jarilo.Metadata.Builders;
 using Jarilo.Parsing;
+using Jarilo.Reflection;
 using Jarilo.Tokenizing;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -16,7 +17,12 @@ namespace Jarilo
     {
         public IServiceCollection Services { get; }
 
+        ServiceProvider ServiceProvider
+            => _serviceProvider ?? (_serviceProvider = Services.BuildServiceProvider());
         ServiceProvider _serviceProvider;
+
+        AppMetadata Metadata
+            => _metadata ?? (_metadata = _metadataBuilder.Build(_types, ServiceProvider));
         AppMetadata _metadata;
 
         readonly Type[] _types;
@@ -43,23 +49,22 @@ namespace Jarilo
                 new ArgumentMetadataBuilder(valueMetadataBuilder),
                 new OptionMetadataBuilder(valueMetadataBuilder),
                 new ArgumentParser(propertyValueParser),
-                new OptionParser(propertyValueParser));
+                new OptionParser(propertyValueParser),
+                new MethodInvoker());
             _commandParser = new CommandParser();
             _helpDocs = new HelpDocs();
         }
 
         public void Run(string[] args)
         {
-            _serviceProvider = _serviceProvider ?? (_serviceProvider = Services.BuildServiceProvider());
-            _metadata = _metadata ?? (_metadata = _metadataBuilder.Build(_types, _serviceProvider));
-            var tokens = _tokenizer.Tokenize(_metadata, args).ToArray();
-            var commandMetadata = _commandParser.Parse(_metadata, tokens);
+            var tokens = _tokenizer.Tokenize(Metadata, args).ToArray();
+            var commandMetadata = _commandParser.Parse(Metadata, tokens);
             var helpTokenExists = tokens.Any(token => token is HelpOptionToken);
             if (commandMetadata == null)
             {
                 if (helpTokenExists)
                 {
-                    _helpDocs.Print(_metadata);
+                    _helpDocs.Print(Metadata);
                 }
                 else
                 {
