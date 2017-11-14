@@ -28,7 +28,7 @@ namespace Jarilo.Tests.ArgumentsTests.Double
             });
         }
 
-        [Fact]
+        [Fact(Skip = "Minor feature. To be implemented in future.")]
         public async Task Single_WithCommaSeparator_Succcess()
         {
             var args = $"{Command.Name} 0,47";

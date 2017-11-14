@@ -11,9 +11,13 @@ namespace Jarilo.Tests
 {
     public class AppTest
     {
-        public static async Task Run(string args, Action<string[]> assert)
+        public static Task Run(string args, Action<string[]> assert)
+            => ArrangeAndRun(args, app => {}, assert);
+
+        public static async Task ArrangeAndRun(string args, Action<App> arrange, Action<string[]> assert)
         {
             var app = CreateTestApp();
+            arrange(app);
             Action act = () =>
             {
                 app.Run(args.Split(" "));
