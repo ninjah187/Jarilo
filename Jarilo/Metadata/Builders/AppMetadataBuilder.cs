@@ -1,7 +1,9 @@
 ﻿using Jarilo.Parsing;
+using Jarilo.Reflection;
 using Jarilo.Tokenizing;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -14,17 +16,20 @@ namespace Jarilo.Metadata.Builders
         readonly OptionMetadataBuilder _optionMetadataBuilder;
         readonly ArgumentParser _argumentParser;
         readonly OptionParser _optionParser;
+        readonly MethodInvoker _invoker;
 
         public AppMetadataBuilder(
             ArgumentMetadataBuilder argumentMetadataBuilder,
             OptionMetadataBuilder optionMetadataBuilder,
             ArgumentParser argumentParser,
-            OptionParser optionParser)
+            OptionParser optionParser,
+            MethodInvoker invoker)
         {
             _argumentMetadataBuilder = argumentMetadataBuilder;
             _optionMetadataBuilder = optionMetadataBuilder;
             _argumentParser = argumentParser;
             _optionParser = optionParser;
+            _invoker = invoker;
         }
 
         public AppMetadata Build(Type[] types, IServiceProvider services)
@@ -74,7 +79,7 @@ namespace Jarilo.Metadata.Builders
                             .GetParameters()
                             .Select(parameter => services.GetService(parameter.ParameterType))
                             .ToArray();
-                        return constructor.Invoke(parameters);
+                        return _invoker.Invoke(() => constructor.Invoke(parameters));
                     };
                     Func<Token[], object> argumentsFactory = tokens => _argumentParser.Parse(aggregate.Run.ParameterTypes.arguments, tokens);
                     Func<Token[], object> optionsFactory = tokens => _optionParser.Parse(aggregate.Run.ParameterTypes.options, tokens);
@@ -99,17 +104,18 @@ namespace Jarilo.Metadata.Builders
                         var runMethod = aggregate.Run.Method;
                         var command = commandFactory();
                         var runMethodParameters = runMethodParametersFactory(tokens);
-                        var viewModel = runMethod.Invoke(command, runMethodParameters);
+                        var viewModel = _invoker.Invoke(() => runMethod.Invoke(command, runMethodParameters));
                         if (!viewMetadata.Exists || aggregate.View.Render == null)
                         {
                             return;
                         }
-                        var viewMethodParameters = new List<object>();
-                        if (viewModel != null)
+                        var renderMethodParameters = aggregate.View.Render.GetParameters().Length == 0
+                            ? Array.Empty<object>()
+                            : new[] { viewModel };
+                        _invoker.Invoke(() =>
                         {
-                            viewMethodParameters.Add(viewModel);
-                        }
-                        aggregate.View.Render.Invoke(viewMetadata.Instance, viewMethodParameters.ToArray());
+                            aggregate.View.Render.Invoke(viewMetadata.Instance, renderMethodParameters);
+                        });
                     };
                     return new CommandMetadata(
                         aggregate.CommandAttribute.Name,
@@ -128,6 +134,10 @@ namespace Jarilo.Metadata.Builders
 
         (Type arguments, Type options) GetRunMethodParameterTypes(MethodInfo runMethod)
         {
+            if (runMethod == null)
+            {
+                return (null, null);
+            }
             Type arguments = null;
             Type options = null;
             foreach (var parameter in runMethod.GetParameters())
