@@ -1,4 +1,5 @@
 branches:
+  only:
   - master
 language: csharp
 solution: Jarilo.sln
