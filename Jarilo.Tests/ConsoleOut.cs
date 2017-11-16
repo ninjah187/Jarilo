@@ -24,11 +24,11 @@ namespace Jarilo.Tests
                     rawOutput = writer.ToString();
                 }
             }
-            var output = await ReadOutput(rawOutput).ConfigureAwait(false);
+            var output = await ReadOutputLines(rawOutput).ConfigureAwait(false);
             return output;
         }
 
-        static async Task<string[]> ReadOutput(string rawOutput)
+        static async Task<string[]> ReadOutputLines(string rawOutput)
         {
             using (var reader = new StringReader(rawOutput))
             {

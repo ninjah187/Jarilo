@@ -39,10 +39,13 @@ namespace Jarilo.Tests.OptionsTests.Enum
         }
 
         [Fact]
-        public void Many_FirstNotEnum_ThrowsException()
+        public async Task Many_FirstNotEnum_ThrowsException()
         {
             var args = $"{Command.Name} --enum not-enum value-1 values 1 2 3";
-            AppTest.Throws<FormatException>(args);
+            await AppTest.Run(args, output =>
+            {
+                output.AssertParsingException("--enum", "not-enum");
+            });
         }
     }
 }

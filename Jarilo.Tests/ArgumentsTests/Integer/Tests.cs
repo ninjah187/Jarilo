@@ -34,10 +34,13 @@ namespace Jarilo.Tests.ArgumentsTests.Integer
         }
 
         [Fact]
-        public void Single_NotInteger_ThrowsException()
+        public async Task Single_NotInteger_ErrorMessage()
         {
             var args = $"{Command.Name} string";
-            AppTest.Throws<FormatException>(args);
+            await AppTest.Run(args, output =>
+            {
+                output.AssertParsingException("integer", "string");
+            });
         }
 
         [Fact]
@@ -54,10 +57,13 @@ namespace Jarilo.Tests.ArgumentsTests.Integer
         }
 
         [Fact]
-        public void Many_FirstNotInteger_ThrowsException()
+        public async Task Many_FirstNotInteger_ErrorMessage()
         {
             var args = $"{Command.Name} string 1 2 3";
-            AppTest.Throws<FormatException>(args);
+            await AppTest.Run(args, output =>
+            {
+                output.AssertParsingException("integer", "string");
+            });
         }
     }
 }

@@ -33,10 +33,13 @@ namespace Jarilo.Tests.ArgumentsTests.Enum
         }
 
         [Fact]
-        public void Single_NotEnum_ThrowsException()
+        public async Task Single_NotEnum_ErrorMessage()
         {
             var args = $"{Command.Name} not-enum-value";
-            AppTest.Throws<FormatException>(args);
+            await AppTest.Run(args, output =>
+            {
+                output.AssertParsingException("enum", "not-enum-value");
+            });
         }
 
         [Fact]
@@ -52,10 +55,13 @@ namespace Jarilo.Tests.ArgumentsTests.Enum
         }
 
         [Fact]
-        public void Many_FirstNotEnum_ThrowsException()
+        public async Task Many_FirstNotEnum_ErrorMessage()
         {
             var args = $"{Command.Name} any value-1 1 2 3";
-            AppTest.Throws<FormatException>(args);
+            await AppTest.Run(args, output =>
+            {
+                output.AssertParsingException("enum", "any");
+            });
         }
     }
 }

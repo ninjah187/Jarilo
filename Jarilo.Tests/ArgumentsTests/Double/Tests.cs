@@ -39,10 +39,13 @@ namespace Jarilo.Tests.ArgumentsTests.Double
         }
 
         [Fact]
-        public void Single_NotDouble_ThrowsException()
+        public async Task Single_NotDouble_ErrorMessage()
         {
             var args = $"{Command.Name} not-double";
-            AppTest.Throws<FormatException>(args);
+            await AppTest.Run(args, output =>
+            {
+                output.AssertParsingException("double", "not-double");
+            });
         }
 
         [Fact]
@@ -56,10 +59,13 @@ namespace Jarilo.Tests.ArgumentsTests.Double
         }
 
         [Fact]
-        public void Many_FirstNotDouble_ThrowsException()
+        public async Task Many_FirstNotDouble_ErrorMessage()
         {
             var args = $"{Command.Name} not-double 0.47 any values 1 2 3";
-            AppTest.Throws<FormatException>(args);
+            await AppTest.Run(args, output =>
+            {
+                output.AssertParsingException("double", "not-double");
+            });
         }
     }
 }

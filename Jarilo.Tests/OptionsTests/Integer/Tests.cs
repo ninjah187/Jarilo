@@ -39,7 +39,7 @@ namespace Jarilo.Tests.OptionsTests.Integer
         }
 
         [Fact]
-        public async Task Many_FirstDouble_OnlyFirstRead()
+        public async Task Many_FirstInteger_OnlyFirstRead()
         {
             var args = $"{Command.Name} --integer 47 any values 1 2 3";
             await AppTest.Run(args, output =>
@@ -49,10 +49,13 @@ namespace Jarilo.Tests.OptionsTests.Integer
         }
 
         [Fact]
-        public void Many_FirstNotDouble_ThrowsException()
+        public async Task Many_FirstNotInteger_ThrowsException()
         {
             var args = $"{Command.Name} --integer not-integer 47 any values 1 2 3";
-            AppTest.Throws<FormatException>(args);
+            await AppTest.Run(args, output =>
+            {
+                output.AssertParsingException("--integer", "not-integer");
+            });
         }
     }
 }
