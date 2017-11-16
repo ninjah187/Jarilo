@@ -17,8 +17,7 @@ namespace Jarilo.Parsing
         {
             _propertyValueParser = propertyValueParser;
         }
-
-        // TODO: pass metadata to parsers?
+        
         public object Parse(Type argumentsType, Token[] tokens)
         {
             if (argumentsType == null)
