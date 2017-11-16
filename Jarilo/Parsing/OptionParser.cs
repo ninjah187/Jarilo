@@ -1,4 +1,5 @@
-﻿using Jarilo.Tokenizing;
+﻿using Jarilo.Parsing.Exceptions;
+using Jarilo.Tokenizing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,9 +40,7 @@ namespace Jarilo.Parsing
                     .OfType<ValueToken>()
                     .Select(token => token.Value)
                     .ToArray();
-                var setParameter = _propertyValueParser.ParseBool(propertyType)
-                    ?? _propertyValueParser.ParseValues(propertyType, optionValues)
-                    ?? _propertyValueParser.ParseValue(propertyType, ref optionValues);
+                var setParameter = ParseProperty(propertyType, optionAggregate.optionAttribute.Name, ref optionValues);
                 set.Invoke(options, new object[] { setParameter });
             }
             return options;
@@ -85,6 +84,23 @@ namespace Jarilo.Parsing
                 yield break;
             }
             yield return (delimiter, followedBy.ToArray());
+        }
+
+        object ParseProperty(Type propertyType, string optionName, ref string[] optionValues)
+        {
+            try
+            {
+                return _propertyValueParser.ParseBool(propertyType)
+                    ?? _propertyValueParser.ParseValues(propertyType, optionValues)
+                    ?? _propertyValueParser.ParseValue(propertyType, ref optionValues);
+            }
+            catch (ValueParsingException exception)
+            {
+                throw new ParsingException(
+                    exception,
+                    ParsingTarget.Option,
+                    optionName);
+            }
         }
     }
 }

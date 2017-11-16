@@ -2,6 +2,7 @@
 using Jarilo.Metadata;
 using Jarilo.Metadata.Builders;
 using Jarilo.Parsing;
+using Jarilo.Parsing.Exceptions;
 using Jarilo.Reflection;
 using Jarilo.Tokenizing;
 using Microsoft.Extensions.DependencyInjection;
@@ -77,7 +78,15 @@ namespace Jarilo
                 _helpDocs.Print(commandMetadata);
                 return;
             }
-            commandMetadata.Run(tokens);
+            try
+            {
+                commandMetadata.Run(tokens);
+            }
+            catch (ParsingException exception)
+            {
+                Console.WriteLine(
+                    $"Incorrect value \"{exception.Value}\" of {exception.Target.Map()} \"{exception.Name}\".");
+            }
             if (_disposeAfterRun == true)
             {
                 Dispose();

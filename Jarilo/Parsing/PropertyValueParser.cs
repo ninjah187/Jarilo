@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jarilo.Parsing.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -49,8 +50,14 @@ namespace Jarilo.Parsing
             {
                 return ParseEnum(propertyType, value);
             }
-            var convertedValue = Convert.ChangeType(value, propertyType, CultureInfo.InvariantCulture);
-            return convertedValue;
+            try
+            {
+                return Convert.ChangeType(value, propertyType, CultureInfo.InvariantCulture);
+            }
+            catch (FormatException exception)
+            {
+                throw new ValueParsingException(exception, value);
+            }
         }
 
         public object ParseEnum(Type enumType, string value)
@@ -66,7 +73,8 @@ namespace Jarilo.Parsing
                 .FirstOrDefault();
             if (optionEnumValueAggregate == null)
             {
-                throw new FormatException($"Parsing error in enum value {value} of type {enumType.FullName}.");
+                var formatException = new FormatException($"Parsing error in enum value {value} of type {enumType.FullName}.");
+                throw new ValueParsingException(formatException, value);
             }
             else
             {

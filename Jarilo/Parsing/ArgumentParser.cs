@@ -1,4 +1,6 @@
-﻿using Jarilo.Tokenizing;
+﻿using Jarilo.Parsing.Exceptions;
+using Jarilo.Tokenizing;
+using Jarilo.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,10 +30,8 @@ namespace Jarilo.Parsing
             var argumentValues = ParseValues(tokens).ToArray();
             foreach (var aggregate in propertyAggregates)
             {
-                var propertyType = aggregate.property.PropertyType;
                 var set = aggregate.property.GetSetMethod();
-                var setParameter = _propertyValueParser.ParseValues(propertyType, argumentValues)
-                    ?? _propertyValueParser.ParseValue(propertyType, ref argumentValues);
+                var setParameter = ParseProperty(aggregate.property, ref argumentValues);
                 set.Invoke(arguments, new object[] { setParameter });
             }
             return arguments;
@@ -62,6 +62,23 @@ namespace Jarilo.Parsing
                         yield return valueToken.Value;
                         break;
                 }
+            }
+        }
+
+        object ParseProperty(PropertyInfo propertyInfo, ref string[] argumentValues)
+        {
+            try
+            {
+                var propertyType = propertyInfo.PropertyType;
+                return _propertyValueParser.ParseValues(propertyType, argumentValues)
+                    ?? _propertyValueParser.ParseValue(propertyType, ref argumentValues);
+            }
+            catch (ValueParsingException exception)
+            {
+                throw new ParsingException(
+                    exception,
+                    ParsingTarget.Argument,
+                    propertyInfo.Name.FirstToLower());
             }
         }
     }
