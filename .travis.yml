@@ -1,0 +1,16 @@
+branches:
+  - master
+language: csharp
+solution: Jarilo.sln
+mono: none
+dotnet: 2.0.0
+dist: trusty
+script:
+  - dotnet test Jarilo.Tests
+  - dotnet pack --configuration Release Jarilo
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: dotnet nuget push Jarilo/bin/Release/*.nupkg --api-key $NUGET_API_KEY --source https://www.nuget.org/api/v2/package
+    on:
+      branch: master
