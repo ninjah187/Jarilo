@@ -24,6 +24,14 @@ Jarilo takes MVC approach where C stands for Command instead of Controller. This
 
 ## Usage:
 
+### Installation:
+
+All released Jarilo versions can be obtained via NuGet Package Manager.
+
+| Package | Version | Build                                                                                                               |
+| ------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
+| Jarilo  | 1.0.0   | [![Build Status](https://travis-ci.org/ninjah187/Jarilo.svg?branch=master)](https://travis-ci.org/ninjah187/Jarilo) |
+
 ### Running application:
 
 Jarilo app can be run in just few lines of code:
@@ -365,6 +373,7 @@ Please check project `Jarilo.Examples` in source code for more sophisticated exa
 
 - `async` support.
 - Shorthand options.
+- Setting return code of an app.
 - Exporting documentation of application (e. g. in Markdown format).
 - Rich configuration options (e.g. translations, REPL prompt etc).
 - Pluggable IoC container.
