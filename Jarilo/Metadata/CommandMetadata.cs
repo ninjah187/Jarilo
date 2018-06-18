@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Jarilo.Metadata
 {
@@ -12,7 +13,7 @@ namespace Jarilo.Metadata
         public string Description { get; }
         public Func<Token[], object> ArgumentsFactory { get; }
         public Func<Token[], object> OptionsFactory { get; }
-        public Action<Token[]> Run { get; }
+        public Func<Token[], Task> Run { get; }
         public ArgumentMetadata[] Arguments { get; }
         public OptionMetadata[] Options { get; }
         public ViewMetadata View { get; }
@@ -27,7 +28,7 @@ namespace Jarilo.Metadata
             Func<object> factory,
             Func<Token[], object> argumentsFactory,
             Func<Token[], object> optionsFactory,
-            Action<Token[]> run)
+            Func<Token[], Task> run)
         {
             Name = name;
             Description = description;

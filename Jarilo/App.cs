@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Jarilo
 {
@@ -56,7 +57,12 @@ namespace Jarilo
             _helpDocs = new HelpDocs();
         }
 
-        public void Run(string[] args)
+        void Dispose()
+        {
+            _serviceProvider?.Dispose();
+        }
+
+        public async Task RunAsync(string[] args)
         {
             var tokens = _tokenizer.Tokenize(Metadata, args).ToArray();
             var commandMetadata = _commandParser.Parse(Metadata, tokens);
@@ -80,7 +86,7 @@ namespace Jarilo
             }
             try
             {
-                commandMetadata.Run(tokens);
+                await commandMetadata.Run(tokens);
             }
             catch (ParsingException exception)
             {
@@ -93,7 +99,7 @@ namespace Jarilo
             }
         }
 
-        public void ReadEvalPrintLoop()
+        public async Task ReadEvalPrintLoopAsync()
         {
             _disposeAfterRun = false;
             while (true)
@@ -105,13 +111,12 @@ namespace Jarilo
                     Dispose();
                     return;
                 }
-                Run(input.Split(" "));
+                await RunAsync(input.Split(" "));
             }
         }
 
-        void Dispose()
-        {
-            _serviceProvider?.Dispose();
-        }
+        public void Run(string[] args) => RunAsync(args).Wait();
+
+        public void ReadEvalPrintLoop() => ReadEvalPrintLoopAsync().Wait();
     }
 }

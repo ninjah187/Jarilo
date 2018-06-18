@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Jarilo.Metadata.Builders
 {
@@ -99,12 +100,13 @@ namespace Jarilo.Metadata.Builders
                         }
                         return parameters.ToArray();
                     };
-                    Action<Token[]> run = tokens =>
+                    Func<Token[], Task> run = async tokens =>
                     {
                         var runMethod = aggregate.Run.Method;
                         var command = commandFactory();
                         var runMethodParameters = runMethodParametersFactory(tokens);
-                        var viewModel = _invoker.Invoke(() => runMethod.Invoke(command, runMethodParameters));
+                        var runResult = _invoker.Invoke(() => runMethod.Invoke(command, runMethodParameters));
+                        var viewModel = await ExtractResult(runResult);
                         if (!viewMetadata.Exists || aggregate.View.Render == null)
                         {
                             return;
@@ -154,6 +156,21 @@ namespace Jarilo.Metadata.Builders
                 }
             }
             return (arguments, options);
+        }
+
+        static async Task<object> ExtractResult(object runResult)
+        {
+            switch (runResult)
+            {
+                case Task<object> task:
+                    await task;
+                    return task.Result;
+                case Task task:
+                    await task;
+                    return null;
+                default:
+                    return runResult;
+            }
         }
     }
 }
