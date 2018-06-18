@@ -115,8 +115,26 @@ namespace Jarilo
             }
         }
 
-        public void Run(string[] args) => RunAsync(args).Wait();
+        public void Run(string[] args)
+        {
+            RethrowAggregateInnerException(() => RunAsync(args).Wait());
+        }
 
-        public void ReadEvalPrintLoop() => ReadEvalPrintLoopAsync().Wait();
+        public void ReadEvalPrintLoop()
+        {
+            RethrowAggregateInnerException(() => ReadEvalPrintLoopAsync().Wait());
+        }
+
+        static void RethrowAggregateInnerException(Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch (AggregateException exception)
+            {
+                throw exception.InnerException;
+            }
+        }
     }
 }
