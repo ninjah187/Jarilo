@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <PackageId>Jarilo</PackageId>
-    <PackageVersion>1.1.0-beta</PackageVersion>
+    <PackageVersion>1.1.0-beta2</PackageVersion>
     <Authors>Karol Hinz</Authors>
     <Description>.NET Core 2.0 command line application framework.</Description>
     <ProjectUrl>https://github.com/ninjah187/Jarilo</ProjectUrl>
