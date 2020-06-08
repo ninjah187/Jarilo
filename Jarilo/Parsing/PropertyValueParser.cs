@@ -50,6 +50,11 @@ namespace Jarilo.Parsing
             {
                 return ParseEnum(propertyType, value);
             }
+            else if (IsNullable(propertyType))
+            {
+                string[] valueAsArray = new string[] { value };
+                return ParseValue(Nullable.GetUnderlyingType(propertyType), ref valueAsArray);
+            }
             try
             {
                 return Convert.ChangeType(value, propertyType, CultureInfo.InvariantCulture);
@@ -81,5 +86,8 @@ namespace Jarilo.Parsing
                 return optionEnumValueAggregate.EnumValue;
             }
         }
+
+        private static bool IsNullable(Type type) => Nullable.GetUnderlyingType(type) != null;
+
     }
 }
