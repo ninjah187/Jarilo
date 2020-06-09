@@ -3,12 +3,12 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <PackageId>Jarilo</PackageId>
-    <PackageVersion>1.1.0-beta2</PackageVersion>
-    <Authors>Karol Hinz</Authors>
+    <PackageVersion>1.2.0</PackageVersion>
+    <Authors>Karol Hinz, dwright78</Authors>
     <Description>.NET Core 2.0 command line application framework.</Description>
     <ProjectUrl>https://github.com/ninjah187/Jarilo</ProjectUrl>
     <PackageTags>command line interface cli app terminal console</PackageTags>
-    <PackageReleaseNotes>Added support for async commands. Command.Run method can now be made async.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added support for nullable option types.</PackageReleaseNotes>
     <PackageReleaseNotes></PackageReleaseNotes>
   </PropertyGroup>
 
