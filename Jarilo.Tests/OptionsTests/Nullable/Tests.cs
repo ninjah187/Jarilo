@@ -19,17 +19,7 @@ namespace Jarilo.Tests.OptionsTests.Nullable
         }
 
         [Fact]
-        public async Task DotSeparator_Success()
-        {
-            var args = $"{Command.Name} --nullable 47";
-            await AppTest.Run(args, output =>
-            {
-                output.AssertOption(47);
-            });
-        }
-
-        [Fact]
-        public async Task CommaSeparator_Success()
+        public async Task NormalUse_Success()
         {
             var args = $"{Command.Name} --nullable 47";
             await AppTest.Run(args, output =>
