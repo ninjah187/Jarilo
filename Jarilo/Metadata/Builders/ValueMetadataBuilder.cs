@@ -13,6 +13,7 @@ namespace Jarilo.Metadata.Builders
             var propertyCoreType = property.PropertyType.IsArray
                 ? property.PropertyType.GetElementType()
                 : property.PropertyType;
+            propertyCoreType = Nullable.GetUnderlyingType(propertyCoreType) ?? propertyCoreType;
             if (!propertyCoreType.IsEnum)
             {
                 return null;
