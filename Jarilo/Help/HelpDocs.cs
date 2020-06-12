@@ -100,7 +100,11 @@ namespace Jarilo.Help
             var values = $"\n    Possible values:";
             foreach (var value in metadata)
             {
-                values += $"\n      {value.Name} - {value.Description}";
+                values += $"\n      {value.Name}";
+                if(!(value.Description is null))
+                {
+                    values += $" - {value.Description}";
+                }
             }
             return values;
         }
