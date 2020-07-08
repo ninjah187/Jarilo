@@ -30,7 +30,7 @@ All released Jarilo versions can be obtained via NuGet Package Manager.
 
 | Package | Version | Build                                                                                                               |
 | ------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
-| Jarilo  | 1.2.0   | [![Build Status](https://travis-ci.org/ninjah187/Jarilo.svg?branch=master)](https://travis-ci.org/ninjah187/Jarilo) |
+| Jarilo  | 1.3.0   | [![Build Status](https://travis-ci.org/ninjah187/Jarilo.svg?branch=master)](https://travis-ci.org/ninjah187/Jarilo) |
 
 ### Running application:
 

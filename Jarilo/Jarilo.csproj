@@ -8,7 +8,7 @@
     <Description>.NET Core 2.0 command line application framework.</Description>
     <ProjectUrl>https://github.com/ninjah187/Jarilo</ProjectUrl>
     <PackageTags>command line interface cli app terminal console</PackageTags>
-    <PackageReleaseNotes>Added support for nullable option types.</PackageReleaseNotes>
+    <PackageReleaseNotes>Improvements in null values help docs generation.</PackageReleaseNotes>
     <PackageReleaseNotes></PackageReleaseNotes>
   </PropertyGroup>
 
