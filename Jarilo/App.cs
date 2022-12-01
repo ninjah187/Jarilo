@@ -111,7 +111,7 @@ namespace Jarilo
                     Dispose();
                     return;
                 }
-                await RunAsync(input.Split(" "));
+                await RunAsync(input.Split(' '));
             }
         }
 
