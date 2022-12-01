@@ -5,7 +5,7 @@
     <PackageId>Jarilo</PackageId>
     <PackageVersion>2.0.0</PackageVersion>
     <Authors>Karol Hinz, dwright78</Authors>
-    <Description>.NET Core 2.0 command line application framework.</Description>
+    <Description>.NET Standard 2.0 command line application framework.</Description>
     <ProjectUrl>https://github.com/ninjah187/Jarilo</ProjectUrl>
     <PackageTags>command line interface cli app terminal console</PackageTags>
     <PackageReleaseNotes>Improvements in null values help docs generation.</PackageReleaseNotes>
