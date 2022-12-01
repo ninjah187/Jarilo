@@ -1,6 +1,6 @@
 # Jarilo
 
-## .NET Core 2.0 command line application framework.
+## .NET Standard 2.0 command line application framework.
 
 Have you built nice library and realized adding CLI tooling would be great but you get headache whenever thinking about all the wasted time on writing boilerplate code?
 
