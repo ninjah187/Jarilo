@@ -21,7 +21,7 @@ namespace Jarilo.Tokenizing
 
         public IEnumerable<Token> Tokenize(AppMetadata appMetadata, string[] args)
         {
-            var joinedArgs = string.Join(' ', args);
+            var joinedArgs = string.Join(" ", args);
             var inputCommandName = appMetadata
                 .Commands
                 .Select(command => command.Name)
@@ -34,7 +34,7 @@ namespace Jarilo.Tokenizing
             args = joinedArgs
                 .Remove(0, inputCommandName?.Length ?? 0)
                 .TrimStart(' ')
-                .Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             var valueAccumulator = new List<string>();
             foreach (var arg in args)
             {
@@ -49,10 +49,10 @@ namespace Jarilo.Tokenizing
                     continue;
                 }
                 var quotationMarks = QuotationMarks.None;
-                quotationMarks |= arg.StartsWith('\"')
+                quotationMarks |= arg.StartsWith("\"")
                     ? QuotationMarks.Start
                     : QuotationMarks.None;
-                quotationMarks |= arg.EndsWith('\"')
+                quotationMarks |= arg.EndsWith("\"")
                     ? QuotationMarks.End
                     : QuotationMarks.None;
                 if (quotationMarks == QuotationMarks.None)
@@ -69,7 +69,7 @@ namespace Jarilo.Tokenizing
                 valueAccumulator.Add(value);
                 if (quotationMarks == QuotationMarks.End)
                 {
-                    value = string.Join(' ', valueAccumulator);
+                    value = string.Join(" ", valueAccumulator);
                     valueAccumulator.Clear();
                     yield return new ValueToken(value);
                 }
