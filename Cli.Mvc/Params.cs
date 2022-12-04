@@ -13,6 +13,11 @@ namespace Cli.Mvc
             _params = @params;
         }
 
+        public bool Exists(string name)
+        {
+            return _params.ContainsKey(name);
+        }
+
         public T Get<T>(string name)
         {
             return (T) Convert.ChangeType(_params[name], typeof(T));

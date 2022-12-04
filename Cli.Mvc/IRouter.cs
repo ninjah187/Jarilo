@@ -6,6 +6,7 @@ namespace Cli.Mvc
 {
     public interface IRouter
     {
+        IReadOnlyList<Route> Routes { get; }
         RuntimeAction Resolve(string command);
     }
 }

@@ -9,9 +9,9 @@ namespace Cli.Mvc
     {
         static Token[] EndToken { get; } = new[] { new Token(TokenType.End, null) };
 
-        public IEnumerable<Token> Tokenize(string args)
+        public IEnumerable<Token> Tokenize(string parameters)
         {
-            return args.Select(Tokenify).Concat(EndToken);
+            return parameters.Select(Tokenify).Concat(EndToken);
         }
 
         Token Tokenify(char value) => new Token(ClassifyToken(value), value);

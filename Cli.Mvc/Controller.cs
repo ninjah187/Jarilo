@@ -6,11 +6,15 @@ namespace Cli.Mvc
 {
     public class Controller
     {
-        protected Params Arguments { get; }
-        protected Params Options { get; }
+        // rename to non-plural form? Argument / Option ? works better with Option.Exists()
+        
+        public ICommandContext CommandContext { get; private set; }
 
-        //protected IActionResult Ok(string message) => new OkView();
-        //protected IActionResult Error(string message) => new ErrorView();
-        //protected IActionResult Help() => throw new NotImplementedException();
+        public Params Arguments => CommandContext.Arguments;
+        public Params Options => CommandContext.Options;
+
+        protected IActionResult Ok(string message) => new MessageView(message);
+        protected IActionResult Error(string message) => new MessageView(message);
+        protected IActionResult Help() => new HelpView(CommandContext.Path);
     }
 }

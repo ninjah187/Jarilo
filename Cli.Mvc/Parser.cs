@@ -11,7 +11,7 @@ namespace Cli.Mvc
 
         delegate void TokenOperation(char? value);
 
-        public static ParsedParams Parse(IEnumerable<Token> tokens) => new Parser(tokens).Parse();
+        public static ParsedParams Parse(string parameters) => new Parser(parameters).Parse();
 
         enum Context
         {
@@ -19,7 +19,6 @@ namespace Cli.Mvc
             InsideQuotemark,
             ParsingOptionKey,
         }
-
 
         Context _currentContext;
 
@@ -31,9 +30,9 @@ namespace Cli.Mvc
 
         readonly IEnumerable<Token> _tokens;
 
-        public Parser(string args)
+        public Parser(string parameters)
         {
-            _tokens = new Tokenizer().Tokenize(args);
+            _tokens = new Tokenizer().Tokenize(parameters);
         }
 
         public Parser(IEnumerable<Token> tokens)
